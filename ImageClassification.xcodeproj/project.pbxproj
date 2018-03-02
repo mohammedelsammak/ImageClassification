@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A5539C4B20492DB90005BB50 /* AVKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5539C4920492DB90005BB50 /* AVKit.framework */; };
+		A5539C4C20492DB90005BB50 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5539C4A20492DB90005BB50 /* AVFoundation.framework */; };
+		A5539C4E204937A80005BB50 /* 6.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = A5539C4D2049379F0005BB50 /* 6.mp4 */; };
+		A5539C50204939830005BB50 /* video.MOV in Resources */ = {isa = PBXBuildFile; fileRef = A5539C4F204939830005BB50 /* video.MOV */; };
+		A5539C55204940F40005BB50 /* Andreas.MOV in Resources */ = {isa = PBXBuildFile; fileRef = A5539C54204940F40005BB50 /* Andreas.MOV */; };
+		A5539C57204944E20005BB50 /* Andreas.JPG in Resources */ = {isa = PBXBuildFile; fileRef = A5539C56204944E10005BB50 /* Andreas.JPG */; };
 		A5B2823F2048D0CD0098743C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5B2823E2048D0CD0098743C /* AppDelegate.swift */; };
 		A5B282412048D0CD0098743C /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5B282402048D0CD0098743C /* ViewController.swift */; };
 		A5B282442048D0CD0098743C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A5B282422048D0CD0098743C /* Main.storyboard */; };
@@ -18,6 +24,12 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		A5539C4920492DB90005BB50 /* AVKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVKit.framework; path = System/Library/Frameworks/AVKit.framework; sourceTree = SDKROOT; };
+		A5539C4A20492DB90005BB50 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		A5539C4D2049379F0005BB50 /* 6.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = 6.mp4; sourceTree = "<group>"; };
+		A5539C4F204939830005BB50 /* video.MOV */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = video.MOV; sourceTree = "<group>"; };
+		A5539C54204940F40005BB50 /* Andreas.MOV */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = Andreas.MOV; sourceTree = "<group>"; };
+		A5539C56204944E10005BB50 /* Andreas.JPG */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = Andreas.JPG; sourceTree = "<group>"; };
 		A5B2823B2048D0CD0098743C /* ImageClassification.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ImageClassification.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A5B2823E2048D0CD0098743C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A5B282402048D0CD0098743C /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -35,17 +47,29 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A5539C4B20492DB90005BB50 /* AVKit.framework in Frameworks */,
+				A5539C4C20492DB90005BB50 /* AVFoundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		A5539C4820492DB80005BB50 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				A5539C4A20492DB90005BB50 /* AVFoundation.framework */,
+				A5539C4920492DB90005BB50 /* AVKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		A5B282322048D0CD0098743C = {
 			isa = PBXGroup;
 			children = (
 				A5B2823D2048D0CD0098743C /* ImageClassification */,
 				A5B2823C2048D0CD0098743C /* Products */,
+				A5539C4820492DB80005BB50 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -60,6 +84,10 @@
 		A5B2823D2048D0CD0098743C /* ImageClassification */ = {
 			isa = PBXGroup;
 			children = (
+				A5539C56204944E10005BB50 /* Andreas.JPG */,
+				A5539C54204940F40005BB50 /* Andreas.MOV */,
+				A5539C4F204939830005BB50 /* video.MOV */,
+				A5539C4D2049379F0005BB50 /* 6.mp4 */,
 				A5B282522048D2260098743C /* alphanote_mini.mlmodel */,
 				A5B282502048D12A0098743C /* flowers.mlmodel */,
 				A5B2823E2048D0CD0098743C /* AppDelegate.swift */,
@@ -132,7 +160,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A5539C57204944E20005BB50 /* Andreas.JPG in Resources */,
+				A5539C4E204937A80005BB50 /* 6.mp4 in Resources */,
+				A5539C50204939830005BB50 /* video.MOV in Resources */,
 				A5B282492048D0CD0098743C /* LaunchScreen.storyboard in Resources */,
+				A5539C55204940F40005BB50 /* Andreas.MOV in Resources */,
 				A5B282462048D0CD0098743C /* Assets.xcassets in Resources */,
 				A5B282442048D0CD0098743C /* Main.storyboard in Resources */,
 			);

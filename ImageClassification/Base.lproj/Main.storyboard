@@ -19,13 +19,14 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <arscnView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2ra-yY-mu9">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RCE-du-iua" userLabel="Video View">
                                 <rect key="frame" x="0.0" y="20" width="414" height="716"/>
-                            </arscnView>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </view>
                             <visualEffectView opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TJ5-fY-hgK">
                                 <rect key="frame" x="20" y="615" width="202.33333333333334" height="61"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="XLf-id-yz4">
-                                    <rect key="frame" x="0.0" y="0.0" width="202" height="61"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="202.33333333333334" height="61"/>
                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="1000" text="Searching for faces..." lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zmt-pk-Cvs">
@@ -52,19 +53,20 @@
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="Gj5-Ut-Web" firstAttribute="trailing" secondItem="2ra-yY-mu9" secondAttribute="trailing" id="3KI-yg-L3B"/>
-                            <constraint firstItem="2ra-yY-mu9" firstAttribute="leading" secondItem="Gj5-Ut-Web" secondAttribute="leading" id="4Ld-m4-R0B"/>
-                            <constraint firstItem="2ra-yY-mu9" firstAttribute="top" secondItem="Gj5-Ut-Web" secondAttribute="top" id="5Fq-3c-kYm"/>
                             <constraint firstItem="TJ5-fY-hgK" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="C3C-Lr-WIN"/>
-                            <constraint firstItem="Gj5-Ut-Web" firstAttribute="bottom" secondItem="2ra-yY-mu9" secondAttribute="bottom" id="DRT-7C-uu8"/>
+                            <constraint firstItem="Gj5-Ut-Web" firstAttribute="trailing" secondItem="RCE-du-iua" secondAttribute="trailing" id="GLl-Ny-KjP"/>
                             <constraint firstItem="Gj5-Ut-Web" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="TJ5-fY-hgK" secondAttribute="trailing" constant="16" id="XxC-Sv-6lb"/>
+                            <constraint firstItem="RCE-du-iua" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="big-XR-HJA"/>
+                            <constraint firstItem="Gj5-Ut-Web" firstAttribute="bottom" secondItem="RCE-du-iua" secondAttribute="bottom" id="hZ6-Fn-OH6"/>
+                            <constraint firstItem="RCE-du-iua" firstAttribute="top" secondItem="Gj5-Ut-Web" secondAttribute="top" id="rkf-nK-zYe"/>
                             <constraint firstItem="Gj5-Ut-Web" firstAttribute="bottom" secondItem="TJ5-fY-hgK" secondAttribute="bottom" constant="60" id="uHM-Fd-iwA"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="Gj5-Ut-Web"/>
                     </view>
                     <connections>
                         <outlet property="classificationLabel" destination="zmt-pk-Cvs" id="YGh-Hq-ubS"/>
-                        <outlet property="sceneView" destination="2ra-yY-mu9" id="5yZ-Y1-aSQ"/>
+                        <outlet property="videoView" destination="RCE-du-iua" id="Mgw-3L-I3g"/>
+                        <outlet property="view" destination="8bC-Xf-vdC" id="Uyt-OG-nIS"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
