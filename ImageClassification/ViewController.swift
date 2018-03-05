@@ -7,19 +7,15 @@ import AVKit
 import AVFoundation
 
 class ImageClassificationViewController: UIViewController, ARSCNViewDelegate {
-    // MARK: - IBOutlets        
-    @IBOutlet weak var classificationLabel: UILabel!
+    // MARK: - IBOutlets
     @IBOutlet weak var videoView: UIView!
     @IBOutlet weak var imageView: UIImageView!
-    
     
     // MARK: - Image Classification
     @objc var player: AVPlayer!
     var videoOutput: AVPlayerItemVideoOutput?
     private var scanTimer: Timer?
-    private var scannedFaceViews = [UIView]()
     lazy var mlModel = alphanote_mini()
-    var imagesArray: [UIImage] = []
    
     func setUpOutput() {
         let videoItem = player.currentItem!
@@ -59,21 +55,7 @@ class ImageClassificationViewController: UIViewController, ARSCNViewDelegate {
             
             self.detectFaces(forImage: image)
             
-//             Resnet50 expects an image 224 x 224, so we should resize and crop the source image
-                        let inputImageSize: CGFloat = 224.0
-                        let minLen = min(image.size.width, image.size.height)
-                        let resizedImage = image.resize(to: CGSize(width: inputImageSize * image.size.width / minLen, height: inputImageSize * image.size.height / minLen))
-                        let cropedToSquareImage = resizedImage.cropToSquare()
-            guard let pixelBuffer = cropedToSquareImage?.pixelBuffer() else {
-                fatalError()
-            }
-//
-            DispatchQueue.main.async {
-                if let prediction = try? self.mlModel.prediction(image: pixelBuffer) {
-                    print(prediction.label)
-                    self.classificationLabel.text = prediction.label
-                }
-            }
+
         }
     }
 
@@ -84,6 +66,8 @@ class ImageClassificationViewController: UIViewController, ARSCNViewDelegate {
 
         
         let videoURL = URL(string: "https://bitdash-a.akamaihd.net/content/MI201109210084_1/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8")!
+//        let videoURL = URL(string: "https://bitdash-a.akamaihd.net/content/MI201109210084_1/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8")!
+        
 //        let videoURL = URL(string: "https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4")!
 //        let videoURL = URL(fileURLWithPath: Bundle.main.path(forResource: "Kengo", ofType: "MOV")!)
         player = AVPlayer(url: videoURL)
@@ -92,12 +76,7 @@ class ImageClassificationViewController: UIViewController, ARSCNViewDelegate {
 //        self.videoView.layer.addSublayer(playerLayer)
 
         player.play()
-        
-        
-//        let buffer = BufferReader(delegate: self)
-//        let videoURL = URL(string: "https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4")!
-//        let asset = AVAsset(url: videoURL)
-//        buffer?.startReading(asset, error: nil)
+
         
         player.addPeriodicTimeObserver(
             forInterval: CMTime(value: 1, timescale: 30),
@@ -108,45 +87,52 @@ class ImageClassificationViewController: UIViewController, ARSCNViewDelegate {
 //
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
             self.setUpOutput()
-//            self.scanTimer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(self.doThingsWithFaces), userInfo: nil, repeats: true)
         }
         
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        self.view.bringSubview(toFront: classificationLabel)
-//        self.view.bringSubview(toFront: imageView)
-    }
     
+    func crop(image: UIImage, rect: CGRect)-> UIImage? {
+        UIGraphicsBeginImageContextWithOptions(rect.size, false, image.scale)
+        image.draw(at: CGPoint(x: -rect.origin.x, y: -rect.origin.y))
+        let cropped_image = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return cropped_image
+    }
     
     func detectFaces(forImage image: UIImage) {
         let request = VNDetectFaceRectanglesRequest{request, error in
             var final_image = image
-            
+            let lineWidth = 0.01*final_image.size.width
             if let results = request.results as? [VNFaceObservation]{
-                print(results.count, "faces found")
                 for face_obs in results{
                     //draw original image
                     UIGraphicsBeginImageContextWithOptions(final_image.size, false, 1.0)
                     final_image.draw(in: CGRect(x: 0, y: 0, width: final_image.size.width, height: final_image.size.height))
                     
                     //get face rect
-                    var rect=face_obs.boundingBox
+                    let rect=face_obs.boundingBox
                     let tf=CGAffineTransform.init(scaleX: 1, y: -1).translatedBy(x: 0, y: -final_image.size.height)
                     let ts=CGAffineTransform.identity.scaledBy(x: final_image.size.width, y: final_image.size.height)
-                    let converted_rect=rect.applying(ts).applying(tf)
+                    let converted_rect = rect.applying(ts).applying(tf)
+                    
+                    // Get face to identify
+                    let uiImage = self.crop(image: image, rect: converted_rect)!
+                    let prediction = self.identifyFace(fromImage: uiImage)
                     
                     //draw face rect on image
                     let c=UIGraphicsGetCurrentContext()!
                     c.setStrokeColor(UIColor.red.cgColor)
-                    c.setLineWidth(0.01*final_image.size.width)
+                    c.setLineWidth(lineWidth)
                     c.stroke(converted_rect)
                     
                     // Draw text
-                    let s=UIGraphicsGetCurrentContext()!
-                    "face_obs".draw(in: CGRect(x: 0, y: 0, width: 100, height: 40), withAttributes: [NSAttributedStringKey.foregroundColor: UIColor.white])
+                    let probability = prediction.labelProbability.filter({ $0.key == prediction.label}).first!
+                    
+
+                    let text = String(format: "  %.2f%% %@", probability.value * 100, prediction.label)
+                    
+                    text.draw(in: CGRect(x: converted_rect.origin.x, y: converted_rect.origin.y + converted_rect.size.height + lineWidth, width: converted_rect.size.width * 4, height: 40), withAttributes: [NSAttributedStringKey.foregroundColor: UIColor.white, NSAttributedStringKey.font: UIFont.systemFont(ofSize: 32.0)])
                     
                     
                     //get result image
@@ -177,6 +163,26 @@ class ImageClassificationViewController: UIViewController, ARSCNViewDelegate {
             }
         }
     }
-       
+    
+    
+    func identifyFace(fromImage image: UIImage)-> alphanote_miniOutput {
+        
+        var predictionValue: alphanote_miniOutput!
+        
+        // Resnet50 expects an image 224 x 224, so we should resize and crop the source image
+        let inputImageSize: CGFloat = 224.0
+        let minLen = min(image.size.width, image.size.height)
+        let resizedImage = image.resize(to: CGSize(width: inputImageSize * image.size.width / minLen, height: inputImageSize * image.size.height / minLen))
+        let cropedToSquareImage = resizedImage.cropToSquare()
+        guard let pixelBuffer = cropedToSquareImage?.pixelBuffer() else {
+            fatalError()
+        }
+        
+        if let prediction = try? self.mlModel.prediction(image: pixelBuffer) {
+            predictionValue = prediction
+        }
+        return predictionValue
+    }
+   
 }
 
