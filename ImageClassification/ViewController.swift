@@ -87,8 +87,7 @@ class ImageClassificationViewController: UIViewController, ARSCNViewDelegate {
 //
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
             self.setUpOutput()
-        }
-        
+        }        
     }
     
     
@@ -129,10 +128,13 @@ class ImageClassificationViewController: UIViewController, ARSCNViewDelegate {
                     // Draw text
                     let probability = prediction.labelProbability.filter({ $0.key == prediction.label}).first!
                     
-
-                    let text = String(format: "  %.2f%% %@", probability.value * 100, prediction.label)
                     
-                    text.draw(in: CGRect(x: converted_rect.origin.x, y: converted_rect.origin.y + converted_rect.size.height + lineWidth, width: converted_rect.size.width * 4, height: 40), withAttributes: [NSAttributedStringKey.foregroundColor: UIColor.white, NSAttributedStringKey.font: UIFont.systemFont(ofSize: 32.0)])
+                    var text = String(format: "  %.2f%% %@", probability.value * 100, prediction.label)
+                    if probability.value < 0.6 {
+                        text = "Unknown"
+                    }
+                    
+                    text.draw(in: CGRect(x: converted_rect.origin.x - converted_rect.size.width / 2.0, y: converted_rect.origin.y + converted_rect.size.height + lineWidth, width: converted_rect.size.width * 4, height: 40), withAttributes: [NSAttributedStringKey.foregroundColor: UIColor.white, NSAttributedStringKey.font: UIFont.systemFont(ofSize: 32.0)])
                     
                     
                     //get result image
