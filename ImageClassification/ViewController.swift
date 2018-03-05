@@ -6,7 +6,6 @@ import ARKit
 import AVKit
 import AVFoundation
 
-
 class ImageClassificationViewController: UIViewController, ARSCNViewDelegate {
     // MARK: - IBOutlets        
     @IBOutlet weak var classificationLabel: UILabel!
@@ -20,21 +19,8 @@ class ImageClassificationViewController: UIViewController, ARSCNViewDelegate {
     private var scanTimer: Timer?
     private var scannedFaceViews = [UIView]()
     lazy var mlModel = alphanote_mini()
-    
-    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-        guard let keyPath = keyPath, let item = object as? AVPlayerItem
-            else { return }
-        
-        switch keyPath {
-        case #keyPath(AVPlayerItem.status):
-            if item.status == .readyToPlay {
-                self.setUpOutput()
-            }
-            break
-        default: break
-        }
-    }
-    
+    var imagesArray: [UIImage] = []
+   
     func setUpOutput() {
         let videoItem = player.currentItem!
         if videoItem.status != AVPlayerItemStatus.readyToPlay {
@@ -61,7 +47,7 @@ class ImageClassificationViewController: UIViewController, ARSCNViewDelegate {
         return buffer
     }
     
-    func doThingsWithFaces() {
+    @objc func doThingsWithFaces() {
         guard let buffer = getNewFrame() else { return }
         // some CoreML / Vision things on that.
         // There are numerous examples with this
@@ -96,14 +82,22 @@ class ImageClassificationViewController: UIViewController, ARSCNViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-//        let videoURL = URL(string: "https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4")!
-        let videoURL = URL(fileURLWithPath: Bundle.main.path(forResource: "Kengo", ofType: "MOV")!)
-        player = AVPlayer(url: videoURL)
-        let playerLayer = AVPlayerLayer(player: player)
-        playerLayer.frame = .zero
-        self.videoView.layer.addSublayer(playerLayer)
         
+        let videoURL = URL(string: "https://bitdash-a.akamaihd.net/content/MI201109210084_1/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8")!
+//        let videoURL = URL(string: "https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4")!
+//        let videoURL = URL(fileURLWithPath: Bundle.main.path(forResource: "Kengo", ofType: "MOV")!)
+        player = AVPlayer(url: videoURL)
+//        let playerLayer = AVPlayerLayer(player: player)
+//        playerLayer.frame = self.videoView.bounds
+//        self.videoView.layer.addSublayer(playerLayer)
+
         player.play()
+        
+        
+//        let buffer = BufferReader(delegate: self)
+//        let videoURL = URL(string: "https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4")!
+//        let asset = AVAsset(url: videoURL)
+//        buffer?.startReading(asset, error: nil)
         
         player.addPeriodicTimeObserver(
             forInterval: CMTime(value: 1, timescale: 30),
@@ -111,10 +105,12 @@ class ImageClassificationViewController: UIViewController, ARSCNViewDelegate {
             using: { time in
                 self.doThingsWithFaces()
         })
-
+//
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
             self.setUpOutput()
+//            self.scanTimer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(self.doThingsWithFaces), userInfo: nil, repeats: true)
         }
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -148,6 +144,11 @@ class ImageClassificationViewController: UIViewController, ARSCNViewDelegate {
                     c.setLineWidth(0.01*final_image.size.width)
                     c.stroke(converted_rect)
                     
+                    // Draw text
+                    let s=UIGraphicsGetCurrentContext()!
+                    "face_obs".draw(in: CGRect(x: 0, y: 0, width: 100, height: 40), withAttributes: [NSAttributedStringKey.foregroundColor: UIColor.white])
+                    
+                    
                     //get result image
                     let result=UIGraphicsGetImageFromCurrentImageContext()
                     UIGraphicsEndImageContext()
@@ -176,6 +177,6 @@ class ImageClassificationViewController: UIViewController, ARSCNViewDelegate {
             }
         }
     }
-
+       
 }
 
