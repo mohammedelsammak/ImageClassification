@@ -9,204 +9,173 @@ import AVFoundation
 
 class ImageClassificationViewController: UIViewController, ARSCNViewDelegate {
     // MARK: - IBOutlets        
-    @IBOutlet weak var classificationLabel: UILabel!    
+    @IBOutlet weak var classificationLabel: UILabel!
     @IBOutlet weak var videoView: UIView!
+    @IBOutlet weak var imageView: UIImageView!
     
     
     // MARK: - Image Classification
     @objc var player: AVPlayer!
+    var videoOutput: AVPlayerItemVideoOutput?
     private var scanTimer: Timer?
     private var scannedFaceViews = [UIView]()
+    lazy var mlModel = alphanote_mini()
     
-    /// - Tag: MLModelSetup
-    lazy var classificationRequest: VNCoreMLRequest = {
-        do {
-            /*
-             Use the Swift class `MobileNet` Core ML generates from the model.
-             To use a different Core ML classifier model, add it to the project
-             and replace `MobileNet` with that model's generated Swift class.
-             */
-            let model = try VNCoreMLModel(for: alphanote_mini().model)
-            
-            let request = VNCoreMLRequest(model: model, completionHandler: { [weak self] request, error in
-                self?.processClassifications(for: request, error: error)
-            })
-            request.imageCropAndScaleOption = .centerCrop
-            return request
-        } catch {
-            fatalError("Failed to load Vision ML model: \(error)")
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        guard let keyPath = keyPath, let item = object as? AVPlayerItem
+            else { return }
+        
+        switch keyPath {
+        case #keyPath(AVPlayerItem.status):
+            if item.status == .readyToPlay {
+                self.setUpOutput()
+            }
+            break
+        default: break
         }
-    }()
+    }
+    
+    func setUpOutput() {
+        let videoItem = player.currentItem!
+        if videoItem.status != AVPlayerItemStatus.readyToPlay {
+            // see https://forums.developer.apple.com/thread/27589#128476
+            return
+        }
+        
+        let pixelBuffAttributes = [
+            kCVPixelBufferPixelFormatTypeKey as String: kCVPixelFormatType_420YpCbCr8BiPlanarVideoRange,
+            ] as [String: Any]
+        
+        let videoOutput = AVPlayerItemVideoOutput(pixelBufferAttributes: pixelBuffAttributes)
+        videoItem.add(videoOutput)
+        self.videoOutput = videoOutput
+    }
+    
+    func getNewFrame() -> CVPixelBuffer? {
+        guard let videoOutput = videoOutput, let currentItem = player.currentItem else { return nil }
+        
+        let time = currentItem.currentTime()
+        if !videoOutput.hasNewPixelBuffer(forItemTime: time) { return nil }
+        guard let buffer = videoOutput.copyPixelBuffer(forItemTime: time, itemTimeForDisplay: nil)
+            else { return nil }
+        return buffer
+    }
+    
+    func doThingsWithFaces() {
+        guard let buffer = getNewFrame() else { return }
+        // some CoreML / Vision things on that.
+        // There are numerous examples with this
+        
+        let ciImage = CIImage(cvPixelBuffer: buffer)
+        let image = UIImage(ciImage: ciImage)
+        
+        DispatchQueue.global(qos: .userInitiated).async {
+            
+            self.detectFaces(forImage: image)
+            
+//             Resnet50 expects an image 224 x 224, so we should resize and crop the source image
+                        let inputImageSize: CGFloat = 224.0
+                        let minLen = min(image.size.width, image.size.height)
+                        let resizedImage = image.resize(to: CGSize(width: inputImageSize * image.size.width / minLen, height: inputImageSize * image.size.height / minLen))
+                        let cropedToSquareImage = resizedImage.cropToSquare()
+            guard let pixelBuffer = cropedToSquareImage?.pixelBuffer() else {
+                fatalError()
+            }
+//
+            DispatchQueue.main.async {
+                if let prediction = try? self.mlModel.prediction(image: pixelBuffer) {
+                    print(prediction.label)
+                    self.classificationLabel.text = prediction.label
+                }
+            }
+        }
+    }
+
     
     //MARK:- Init views
     override func viewDidLoad() {
         super.viewDidLoad()
 
-//        let videoURL = URL(string: "https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4")
-        let videoURL = URL(fileURLWithPath: Bundle.main.path(forResource: "Andreas", ofType: "MOV")!)
+//        let videoURL = URL(string: "https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4")!
+        let videoURL = URL(fileURLWithPath: Bundle.main.path(forResource: "Kengo", ofType: "MOV")!)
         player = AVPlayer(url: videoURL)
         let playerLayer = AVPlayerLayer(player: player)
-        playerLayer.frame = self.view.bounds
+        playerLayer.frame = .zero
         self.videoView.layer.addSublayer(playerLayer)
         
         player.play()
-        NotificationCenter.default.addObserver(self, selector: #selector(playerDidFinishPlaying), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: self.player.currentItem)
+        
+        player.addPeriodicTimeObserver(
+            forInterval: CMTime(value: 1, timescale: 30),
+            queue: DispatchQueue(label: "videoProcessing", qos: .background),
+            using: { time in
+                self.doThingsWithFaces()
+        })
 
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            self.setUpOutput()
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        //scan for faces in regular intervals
-        scanTimer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(scanForFaces), userInfo: nil, repeats: true)
-        
         self.view.bringSubview(toFront: classificationLabel)
+//        self.view.bringSubview(toFront: imageView)
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        
-        scanTimer?.invalidate()
-    }
     
-    @objc
-    private func scanForFaces() {
-        
-        //remove the test views and empty the array that was keeping a reference to them
-        _ = scannedFaceViews.map { $0.removeFromSuperview() }
-        scannedFaceViews.removeAll()
-
-        //get the captured image of the ARSession's current frame
-        guard let capturedImage = screenshotCMTime(cmTime: player.currentTime()) else { return }
-//            guard let capturedImage = sceneView.session.currentFrame?.capturedImage else { return }
-//        imageView.image = capturedImage
-        let image = CIImage(image: capturedImage)!
-
-//        let image = CIImage.init(cvPixelBuffer: capturedImage)
-        
-        let detectFaceRequest = VNDetectFaceRectanglesRequest { (request, error) in
-
-            DispatchQueue.main.async {
-                //Loop through the resulting faces and add a red UIView on top of them.
-                if let faces = request.results as? [VNFaceObservation] {
-                    if faces.count == 0 {
-                        self.classificationLabel.text = "Searching for faces..."
-                    }
-                    for face in faces {
-                        let faceFrame = self.faceFrame(from: face.boundingBox)
-                        let faceView = UIView(frame: faceFrame)
-
-                        let croppedCIimage = image.cropImage(toFace: face).rotate
-
-
-                        self.updateClassifications(for: croppedCIimage)
-
-                        faceView.backgroundColor = .clear
-                        faceView.layer.borderColor = UIColor.yellow.cgColor;
-                        faceView.layer.borderWidth = 2;
-
-
-                        self.view.addSubview(faceView)
-
-                        self.scannedFaceViews.append(faceView)
-                    }
+    func detectFaces(forImage image: UIImage) {
+        let request = VNDetectFaceRectanglesRequest{request, error in
+            var final_image = image
+            
+            if let results = request.results as? [VNFaceObservation]{
+                print(results.count, "faces found")
+                for face_obs in results{
+                    //draw original image
+                    UIGraphicsBeginImageContextWithOptions(final_image.size, false, 1.0)
+                    final_image.draw(in: CGRect(x: 0, y: 0, width: final_image.size.width, height: final_image.size.height))
+                    
+                    //get face rect
+                    var rect=face_obs.boundingBox
+                    let tf=CGAffineTransform.init(scaleX: 1, y: -1).translatedBy(x: 0, y: -final_image.size.height)
+                    let ts=CGAffineTransform.identity.scaledBy(x: final_image.size.width, y: final_image.size.height)
+                    let converted_rect=rect.applying(ts).applying(tf)
+                    
+                    //draw face rect on image
+                    let c=UIGraphicsGetCurrentContext()!
+                    c.setStrokeColor(UIColor.red.cgColor)
+                    c.setLineWidth(0.01*final_image.size.width)
+                    c.stroke(converted_rect)
+                    
+                    //get result image
+                    let result=UIGraphicsGetImageFromCurrentImageContext()
+                    UIGraphicsEndImageContext()
+                    
+                    final_image=result!
                 }
             }
-
-        }
-        DispatchQueue.global().async {
-            try? VNImageRequestHandler(ciImage: image, orientation: self.imageOrientation).perform([detectFaceRequest])
-        }
-    }
-    
-    func screenshotCMTime(cmTime: CMTime)  -> (UIImage)?
-    {
-        guard let player = player,let asset = player.currentItem?.asset else
-        {
-            return nil
-        }
-        let imageGenerator = AVAssetImageGenerator(asset: asset)
-        var image: UIImage?
-        var timePicture = kCMTimeZero
-        imageGenerator.appliesPreferredTrackTransform = true
-        imageGenerator.requestedTimeToleranceAfter = kCMTimeZero
-        imageGenerator.requestedTimeToleranceBefore = kCMTimeZero
-        do {
-            let ref = try imageGenerator.copyCGImage(at: cmTime, actualTime: &timePicture)
             
-            image = UIImage(cgImage: ref)
-        }catch {
+            //display final image
+            DispatchQueue.main.async{
+                self.imageView.image = final_image
+            }
         }
-        return image
+        
+        
+        guard let ciimage = image.ciImage else{
+            fatalError("couldn't convert uiimage to ciimage")
+        }
+        
+        let handler=VNImageRequestHandler(ciImage: ciimage)
+        DispatchQueue.global(qos: .userInteractive).async{
+            do{
+                try handler.perform([request])
+            }catch{
+                print(error)
+            }
+        }
     }
 
-    /// - Tag: PerformRequests
-    func updateClassifications(for image: CIImage) {
-        
-        DispatchQueue.global(qos: .userInitiated).async {
-            let handler = VNImageRequestHandler(ciImage: image, orientation: self.imageOrientation)
-            do {
-                try handler.perform([self.classificationRequest])
-            } catch {
-                /*
-                 This handler catches general image processing errors. The `classificationRequest`'s
-                 completion handler `processClassifications(_:error:)` catches errors specific
-                 to processing that request.
-                 */
-                print("Failed to perform classification.\n\(error.localizedDescription)")
-            }
-        }
-    }
-    
-    /// Updates the UI with the results of the classification.
-    /// - Tag: ProcessClassifications
-    func processClassifications(for request: VNRequest, error: Error?) {
-        DispatchQueue.main.async {
-            guard let results = request.results else {
-                self.classificationLabel.text = "Unable to classify image.\n\(error!.localizedDescription)"
-                return
-            }
-            // The `results` will always be `VNClassificationObservation`s, as specified by the Core ML model in this project.
-            let classifications = results as! [VNClassificationObservation]
-            
-            if classifications.isEmpty {
-                self.classificationLabel.text = "Nothing recognized."
-            } else {
-                // Display top classifications ranked by confidence in the UI.
-                let topClassifications = classifications.prefix(2)
-                self.classificationLabel.text = String(format: "  %.2f%% %@", topClassifications[0].confidence*100, topClassifications[0].identifier)
-            }
-        }
-    }
-    
-    private func faceFrame(from boundingBox: CGRect) -> CGRect {
-        
-        //translate camera frame to frame inside the ARSKView
-        let origin = CGPoint(x: boundingBox.minX * videoView.bounds.width, y: (1 - boundingBox.maxY) * videoView.bounds.height)
-        let size = CGSize(width: boundingBox.width * videoView.bounds.width, height: boundingBox.height * videoView.bounds.height)
-        
-        return CGRect(origin: origin, size: size)
-    }
-    
-    //get the orientation of the image that correspond's to the current device orientation
-    private var imageOrientation: CGImagePropertyOrientation {
-        switch UIDevice.current.orientation {
-        case .portrait: return .right
-        case .landscapeRight: return .down
-        case .portraitUpsideDown: return .left
-        case .unknown: fallthrough
-        case .faceUp: fallthrough
-        case .faceDown: fallthrough
-        case .landscapeLeft: return .up
-        }
-    }
-    
-    
-    @objc func playerDidFinishPlaying() {
-        
-        player.seek(to: kCMTimeZero)
-        player.play()
-        
-    }
 }
 

@@ -6,128 +6,16 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "No"
+            shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "ImageClassification/ViewController.swift"
-            timestampString = "541673195.448621"
+            timestampString = "541911292.914716"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "98"
-            endingLineNumber = "98"
-            landmarkName = "scanForFaces()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "ImageClassification/ViewController.swift"
-            timestampString = "541673195.449039"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "94"
-            endingLineNumber = "94"
-            landmarkName = "scanForFaces()"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #2 (__ObjC.VNRequest, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in ImageClassification.ImageClassificationViewController.(scanForFaces in _C9837A2BC79995B8E2A6E8966D8AB8B6)() -&gt; ()"
-                  moduleName = "ImageClassification"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/elsammak/Documents/Examples/ImageClassification/ImageClassification/ViewController.swift"
-                  timestampString = "541672728.9994529"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "92"
-                  endingLineNumber = "92"
-                  offsetFromSymbolStart = "32">
-               </Location>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 () -&gt; () in closure #2 (__ObjC.VNRequest, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in ImageClassification.ImageClassificationViewController.(scanForFaces in _C9837A2BC79995B8E2A6E8966D8AB8B6)() -&gt; ()"
-                  moduleName = "ImageClassification"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/elsammak/Documents/Examples/ImageClassification/ImageClassification/ViewController.swift"
-                  timestampString = "541672729.001353"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "94"
-                  endingLineNumber = "94"
-                  offsetFromSymbolStart = "36">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "ImageClassification/ViewController.swift"
-            timestampString = "541673195.449362"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "92"
-            endingLineNumber = "92"
-            landmarkName = "scanForFaces()"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "ImageClassification.ImageClassificationViewController.(scanForFaces in _C9837A2BC79995B8E2A6E8966D8AB8B6)() -&gt; ()"
-                  moduleName = "ImageClassification"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/elsammak/Documents/Examples/ImageClassification/ImageClassification/ViewController.swift"
-                  timestampString = "541672729.005168"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "90"
-                  endingLineNumber = "90"
-                  offsetFromSymbolStart = "752">
-               </Location>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #2 (__ObjC.VNRequest, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in ImageClassification.ImageClassificationViewController.(scanForFaces in _C9837A2BC79995B8E2A6E8966D8AB8B6)() -&gt; ()"
-                  moduleName = "ImageClassification"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/elsammak/Documents/Examples/ImageClassification/ImageClassification/ViewController.swift"
-                  timestampString = "541672729.006994"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "92"
-                  endingLineNumber = "92"
-                  offsetFromSymbolStart = "32">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "ImageClassification/ViewController.swift"
-            timestampString = "541673195.449656"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "123"
-            endingLineNumber = "123"
-            landmarkName = "scanForFaces()"
+            startingLineNumber = "69"
+            endingLineNumber = "69"
+            landmarkName = "doThingsWithFaces()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
