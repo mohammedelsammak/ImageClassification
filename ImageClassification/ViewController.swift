@@ -64,9 +64,11 @@ class ImageClassificationViewController: UIViewController, ARSCNViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        let videoURL = URL(string: "https://hls.ssh101.com/live/Tokyo/index.m3u8")!;
         
-        let videoURL = URL(string: "https://bitdash-a.akamaihd.net/content/MI201109210084_1/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8")!
+//        let videoURL = URL(string: "http://184.72.239.149/vod/smil:BigBuckBunny.smil/playlist.m3u8")!
 //        let videoURL = URL(string: "https://bitdash-a.akamaihd.net/content/MI201109210084_1/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8")!
+//        let videoURL = URL(string: "https://mnmedias.api.telequebec.tv/m3u8/29880.m3u8")!
         
 //        let videoURL = URL(string: "https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4")!
 //        let videoURL = URL(fileURLWithPath: Bundle.main.path(forResource: "Kengo", ofType: "MOV")!)
@@ -87,7 +89,7 @@ class ImageClassificationViewController: UIViewController, ARSCNViewDelegate {
 //
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
             self.setUpOutput()
-        }        
+        }
     }
     
     
