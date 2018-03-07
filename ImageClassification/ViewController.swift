@@ -16,7 +16,8 @@ class ImageClassificationViewController: UIViewController, ARSCNViewDelegate {
     var videoOutput: AVPlayerItemVideoOutput?
     private var scanTimer: Timer?
     lazy var mlModel = alphanote_mini()
-   
+    let PREPAREDATA = false
+    
     func setUpOutput() {
         let videoItem = player.currentItem!
         if videoItem.status != AVPlayerItemStatus.readyToPlay {
@@ -67,9 +68,9 @@ class ImageClassificationViewController: UIViewController, ARSCNViewDelegate {
 //        let videoURL = URL(string: "https://hls.ssh101.com/live/Tokyo/index.m3u8")!;
         
 //        let videoURL = URL(string: "http://184.72.239.149/vod/smil:BigBuckBunny.smil/playlist.m3u8")!
-        let videoURL = URL(string: "https://bitdash-a.akamaihd.net/content/MI201109210084_1/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8")!
+//        let videoURL = URL(string: "https://bitdash-a.akamaihd.net/content/MI201109210084_1/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8")!
 //        let videoURL = URL(string: "https://mnmedias.api.telequebec.tv/m3u8/29880.m3u8")!
-        
+        let videoURL = URL(string: "http://ec2-13-115-35-165.ap-northeast-1.compute.amazonaws.com/vod/2.mp4")!
 //        let videoURL = URL(string: "https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4")!
 //        let videoURL = URL(fileURLWithPath: Bundle.main.path(forResource: "Kengo", ofType: "MOV")!)
         player = AVPlayer(url: videoURL)
@@ -85,6 +86,7 @@ class ImageClassificationViewController: UIViewController, ARSCNViewDelegate {
             queue: DispatchQueue(label: "videoProcessing", qos: .background),
             using: { time in
                 self.doThingsWithFaces()
+                
         })
 //
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
@@ -119,25 +121,31 @@ class ImageClassificationViewController: UIViewController, ARSCNViewDelegate {
                     
                     // Get face to identify
                     let uiImage = self.crop(image: image, rect: converted_rect)!
-                    let prediction = self.identifyFace(fromImage: uiImage)
-                    
-                    //draw face rect on image
-                    let c=UIGraphicsGetCurrentContext()!
-                    c.setStrokeColor(UIColor.red.cgColor)
-                    c.setLineWidth(lineWidth)
-                    c.stroke(converted_rect)
-                    
-                    // Draw text
-                    let probability = prediction.labelProbability.filter({ $0.key == prediction.label}).first!
-                    
-                    
-                    var text = String(format: "  %.2f%% %@", probability.value * 100, prediction.label)
-                    if probability.value < 0.6 {
-                        text = "Unknown"
+                    if self.PREPAREDATA {
+                        UIImageWriteToSavedPhotosAlbum(uiImage, nil, nil, nil)
                     }
-                    
-                    text.draw(in: CGRect(x: converted_rect.origin.x - converted_rect.size.width / 2.0, y: converted_rect.origin.y + converted_rect.size.height + lineWidth, width: converted_rect.size.width * 4, height: 40), withAttributes: [NSAttributedStringKey.foregroundColor: UIColor.white, NSAttributedStringKey.font: UIFont.systemFont(ofSize: 32.0)])
-                    
+                    else {
+                        let prediction = self.identifyFace(fromImage: uiImage)
+                        
+                        //draw face rect on image
+                        let c=UIGraphicsGetCurrentContext()!
+                        c.setStrokeColor(UIColor.red.cgColor)
+                        c.setLineWidth(lineWidth)
+                        c.stroke(converted_rect)
+                        
+                        // Draw text
+                        let probability = prediction.labelProbability.filter({ $0.key == prediction.label}).first!
+                        
+                        
+                        var text = String(format: "  %.2f%% %@", probability.value * 100, prediction.label)
+                        if probability.value < 0.6 {
+                            text = "Unknown"
+                        }
+                        
+                        text.draw(in: CGRect(x: converted_rect.origin.x, y: converted_rect.origin.y + converted_rect.size.height + lineWidth, width: converted_rect.size.width * 4, height: 40), withAttributes: [NSAttributedStringKey.foregroundColor: UIColor.white, NSAttributedStringKey.font: UIFont.systemFont(ofSize: 32.0)])
+                        
+                        
+                    }
                     
                     //get result image
                     let result=UIGraphicsGetImageFromCurrentImageContext()

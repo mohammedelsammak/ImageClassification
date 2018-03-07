@@ -9,30 +9,19 @@
 /* Begin PBXBuildFile section */
 		A5539C4B20492DB90005BB50 /* AVKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5539C4920492DB90005BB50 /* AVKit.framework */; };
 		A5539C4C20492DB90005BB50 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5539C4A20492DB90005BB50 /* AVFoundation.framework */; };
-		A5539C4E204937A80005BB50 /* 6.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = A5539C4D2049379F0005BB50 /* 6.mp4 */; };
-		A5539C50204939830005BB50 /* video.MOV in Resources */ = {isa = PBXBuildFile; fileRef = A5539C4F204939830005BB50 /* video.MOV */; };
-		A5539C55204940F40005BB50 /* Andreas.MOV in Resources */ = {isa = PBXBuildFile; fileRef = A5539C54204940F40005BB50 /* Andreas.MOV */; };
 		A5539C59204CDAD70005BB50 /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5539C58204CDAD70005BB50 /* UIImage+Extension.swift */; };
-		A5539C5B204CDCDD0005BB50 /* Kengo.MOV in Resources */ = {isa = PBXBuildFile; fileRef = A5539C5A204CDCDD0005BB50 /* Kengo.MOV */; };
-		A5539C5D204CE6440005BB50 /* group.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A5539C5C204CE6440005BB50 /* group.jpg */; };
 		A5539C6B204D15010005BB50 /* CIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5539C6A204D15010005BB50 /* CIImage+Extension.swift */; };
 		A5B2823F2048D0CD0098743C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5B2823E2048D0CD0098743C /* AppDelegate.swift */; };
 		A5B282412048D0CD0098743C /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5B282402048D0CD0098743C /* ViewController.swift */; };
 		A5B282442048D0CD0098743C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A5B282422048D0CD0098743C /* Main.storyboard */; };
 		A5B282462048D0CD0098743C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A5B282452048D0CD0098743C /* Assets.xcassets */; };
 		A5B282492048D0CD0098743C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A5B282472048D0CD0098743C /* LaunchScreen.storyboard */; };
-		A5B282532048D2260098743C /* alphanote_mini.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = A5B282522048D2260098743C /* alphanote_mini.mlmodel */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		A5539C4920492DB90005BB50 /* AVKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVKit.framework; path = System/Library/Frameworks/AVKit.framework; sourceTree = SDKROOT; };
 		A5539C4A20492DB90005BB50 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
-		A5539C4D2049379F0005BB50 /* 6.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = 6.mp4; sourceTree = "<group>"; };
-		A5539C4F204939830005BB50 /* video.MOV */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = video.MOV; sourceTree = "<group>"; };
-		A5539C54204940F40005BB50 /* Andreas.MOV */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = Andreas.MOV; sourceTree = "<group>"; };
 		A5539C58204CDAD70005BB50 /* UIImage+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extension.swift"; sourceTree = "<group>"; };
-		A5539C5A204CDCDD0005BB50 /* Kengo.MOV */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = Kengo.MOV; sourceTree = "<group>"; };
-		A5539C5C204CE6440005BB50 /* group.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = group.jpg; sourceTree = "<group>"; };
 		A5539C6A204D15010005BB50 /* CIImage+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CIImage+Extension.swift"; sourceTree = "<group>"; };
 		A5B2823B2048D0CD0098743C /* ImageClassification.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ImageClassification.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A5B2823E2048D0CD0098743C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -41,7 +30,6 @@
 		A5B282452048D0CD0098743C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A5B282482048D0CD0098743C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A5B2824A2048D0CD0098743C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		A5B282522048D2260098743C /* alphanote_mini.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = alphanote_mini.mlmodel; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,12 +74,6 @@
 		A5B2823D2048D0CD0098743C /* ImageClassification */ = {
 			isa = PBXGroup;
 			children = (
-				A5539C5C204CE6440005BB50 /* group.jpg */,
-				A5539C5A204CDCDD0005BB50 /* Kengo.MOV */,
-				A5539C54204940F40005BB50 /* Andreas.MOV */,
-				A5539C4F204939830005BB50 /* video.MOV */,
-				A5539C4D2049379F0005BB50 /* 6.mp4 */,
-				A5B282522048D2260098743C /* alphanote_mini.mlmodel */,
 				A5B2823E2048D0CD0098743C /* AppDelegate.swift */,
 				A5B282402048D0CD0098743C /* ViewController.swift */,
 				A5B282422048D0CD0098743C /* Main.storyboard */,
@@ -164,12 +146,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A5539C5B204CDCDD0005BB50 /* Kengo.MOV in Resources */,
-				A5539C4E204937A80005BB50 /* 6.mp4 in Resources */,
-				A5539C50204939830005BB50 /* video.MOV in Resources */,
 				A5B282492048D0CD0098743C /* LaunchScreen.storyboard in Resources */,
-				A5539C55204940F40005BB50 /* Andreas.MOV in Resources */,
-				A5539C5D204CE6440005BB50 /* group.jpg in Resources */,
 				A5B282462048D0CD0098743C /* Assets.xcassets in Resources */,
 				A5B282442048D0CD0098743C /* Main.storyboard in Resources */,
 			);
@@ -185,7 +162,6 @@
 				A5B282412048D0CD0098743C /* ViewController.swift in Sources */,
 				A5539C59204CDAD70005BB50 /* UIImage+Extension.swift in Sources */,
 				A5539C6B204D15010005BB50 /* CIImage+Extension.swift in Sources */,
-				A5B282532048D2260098743C /* alphanote_mini.mlmodel in Sources */,
 				A5B2823F2048D0CD0098743C /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
