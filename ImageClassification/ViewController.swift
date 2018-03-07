@@ -74,9 +74,9 @@ class ImageClassificationViewController: UIViewController, ARSCNViewDelegate {
 //        let videoURL = URL(string: "https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4")!
 //        let videoURL = URL(fileURLWithPath: Bundle.main.path(forResource: "Kengo", ofType: "MOV")!)
         player = AVPlayer(url: videoURL)
-//        let playerLayer = AVPlayerLayer(player: player)
-//        playerLayer.frame = self.videoView.bounds
-//        self.videoView.layer.addSublayer(playerLayer)
+        let playerLayer = AVPlayerLayer(player: player)
+        playerLayer.frame = self.view.bounds
+        self.view.layer.addSublayer(playerLayer)
 
         player.play()
 
@@ -156,9 +156,9 @@ class ImageClassificationViewController: UIViewController, ARSCNViewDelegate {
             }
             
             //display final image
-            DispatchQueue.main.async{
-                self.imageView.image = final_image
-            }
+//            DispatchQueue.main.async{
+//                self.imageView.image = final_image
+//            }
         }
         
         

@@ -17,31 +17,10 @@
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RCE-du-iua" userLabel="Video View">
-                                <rect key="frame" x="0.0" y="20" width="414" height="716"/>
-                                <color key="backgroundColor" red="0.72156862749999995" green="0.98823529409999999" blue="0.93725490199999995" alpha="1" colorSpace="calibratedRGB"/>
-                            </view>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="CZt-ns-CNM">
-                                <rect key="frame" x="0.0" y="20" width="414" height="716"/>
-                            </imageView>
-                        </subviews>
-                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
-                        <constraints>
-                            <constraint firstItem="CZt-ns-CNM" firstAttribute="top" secondItem="Gj5-Ut-Web" secondAttribute="top" id="AWs-cd-irM"/>
-                            <constraint firstItem="CZt-ns-CNM" firstAttribute="leading" secondItem="Gj5-Ut-Web" secondAttribute="leading" id="E0F-Oh-hNc"/>
-                            <constraint firstItem="Gj5-Ut-Web" firstAttribute="trailing" secondItem="RCE-du-iua" secondAttribute="trailing" id="GLl-Ny-KjP"/>
-                            <constraint firstItem="Gj5-Ut-Web" firstAttribute="trailing" secondItem="CZt-ns-CNM" secondAttribute="trailing" id="Xze-5v-cRc"/>
-                            <constraint firstItem="RCE-du-iua" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="big-XR-HJA"/>
-                            <constraint firstItem="Gj5-Ut-Web" firstAttribute="bottom" secondItem="RCE-du-iua" secondAttribute="bottom" id="hZ6-Fn-OH6"/>
-                            <constraint firstItem="RCE-du-iua" firstAttribute="top" secondItem="Gj5-Ut-Web" secondAttribute="top" id="rkf-nK-zYe"/>
-                            <constraint firstItem="Gj5-Ut-Web" firstAttribute="bottom" secondItem="CZt-ns-CNM" secondAttribute="bottom" id="xg0-ey-QA7"/>
-                        </constraints>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="Gj5-Ut-Web"/>
                     </view>
                     <connections>
-                        <outlet property="imageView" destination="CZt-ns-CNM" id="fwy-ls-v8G"/>
-                        <outlet property="videoView" destination="RCE-du-iua" id="Mgw-3L-I3g"/>
                         <outlet property="view" destination="8bC-Xf-vdC" id="Uyt-OG-nIS"/>
                     </connections>
                 </viewController>
