@@ -15,7 +15,7 @@ class ImageClassificationViewController: UIViewController, ARSCNViewDelegate {
     @objc var player: AVPlayer!
     var videoOutput: AVPlayerItemVideoOutput?
     private var scanTimer: Timer?
-    lazy var mlModel = alphanote_mini()
+    lazy var mlModel = AlphanoteNew()
     let PREPAREDATA = false
     
     func setUpOutput() {
@@ -70,7 +70,7 @@ class ImageClassificationViewController: UIViewController, ARSCNViewDelegate {
 //        let videoURL = URL(string: "http://184.72.239.149/vod/smil:BigBuckBunny.smil/playlist.m3u8")!
 //        let videoURL = URL(string: "https://bitdash-a.akamaihd.net/content/MI201109210084_1/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8")!
 //        let videoURL = URL(string: "https://mnmedias.api.telequebec.tv/m3u8/29880.m3u8")!
-        let videoURL = URL(string: "http://ec2-13-115-35-165.ap-northeast-1.compute.amazonaws.com/vod/2.mp4")!
+        let videoURL = URL(string: "http://ec2-13-115-35-165.ap-northeast-1.compute.amazonaws.com/vod/3.mp4")!
 //        let videoURL = URL(string: "https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4")!
 //        let videoURL = URL(fileURLWithPath: Bundle.main.path(forResource: "Kengo", ofType: "MOV")!)
         player = AVPlayer(url: videoURL)
@@ -177,9 +177,9 @@ class ImageClassificationViewController: UIViewController, ARSCNViewDelegate {
     }
     
     
-    func identifyFace(fromImage image: UIImage)-> alphanote_miniOutput {
+    func identifyFace(fromImage image: UIImage)-> AlphanoteNewOutput {
         
-        var predictionValue: alphanote_miniOutput!
+        var predictionValue: AlphanoteNewOutput!
         
         // Resnet50 expects an image 224 x 224, so we should resize and crop the source image
         let inputImageSize: CGFloat = 224.0
