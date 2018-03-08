@@ -60,6 +60,12 @@ class ImageClassificationViewController: UIViewController, ARSCNViewDelegate {
         }
     }
 
+    @objc func shotVideo() {
+        if let image = screenshotCMTime(cmTime: player.currentTime()) {
+//            self.imageView.image = image
+            detectFaces(forImage: image)
+        }
+    }
     
     //MARK:- Init views
     override func viewDidLoad() {
@@ -77,23 +83,44 @@ class ImageClassificationViewController: UIViewController, ARSCNViewDelegate {
         let playerLayer = AVPlayerLayer(player: player)
         playerLayer.frame = self.view.bounds
         self.view.layer.addSublayer(playerLayer)
-
+        self.view.bringSubview(toFront: imageView)
         player.play()
-
         
-        player.addPeriodicTimeObserver(
-            forInterval: CMTime(value: 1, timescale: 30),
-            queue: DispatchQueue(label: "videoProcessing", qos: .background),
-            using: { time in
-                self.doThingsWithFaces()
-                
-        })
+        scanTimer = Timer.scheduledTimer(timeInterval: (1/240), target: self, selector: #selector(shotVideo), userInfo: nil, repeats: true)
+        
+//        player.addPeriodicTimeObserver(
+//            forInterval: CMTime(value: 1, timescale: 120),
+//            queue: DispatchQueue(label: "videoProcessing", qos: .background),
+//            using: { time in
+//                self.doThingsWithFaces()
 //
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-            self.setUpOutput()
-        }
+//        })
+////
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+//            self.setUpOutput()
+//        }
     }
     
+    func screenshotCMTime(cmTime: CMTime)  -> (UIImage)?
+    {
+        guard let player = player,let asset = player.currentItem?.asset else
+        {
+            return nil
+        }
+        let imageGenerator = AVAssetImageGenerator(asset: asset)
+        var image: UIImage?
+        var timePicture = kCMTimeZero
+        imageGenerator.appliesPreferredTrackTransform = true
+        imageGenerator.requestedTimeToleranceAfter = kCMTimeZero
+        imageGenerator.requestedTimeToleranceBefore = kCMTimeZero
+        do {
+            let ref = try imageGenerator.copyCGImage(at: cmTime, actualTime: &timePicture)
+            
+            image = UIImage(cgImage: ref)
+        }catch {
+        }
+        return image
+    }
     
     func crop(image: UIImage, rect: CGRect)-> UIImage? {
         UIGraphicsBeginImageContextWithOptions(rect.size, false, image.scale)
@@ -105,10 +132,12 @@ class ImageClassificationViewController: UIViewController, ARSCNViewDelegate {
     
     func detectFaces(forImage image: UIImage) {
         let request = VNDetectFaceRectanglesRequest{request, error in
-            var final_image = image
+            var final_image = image//self.imageWithPixelSize(size: CGSize(width: image.size.width, height: image.size.height))
+            
             let lineWidth = 0.01*final_image.size.width
             if let results = request.results as? [VNFaceObservation]{
                 for face_obs in results{
+                    
                     //draw original image
                     UIGraphicsBeginImageContextWithOptions(final_image.size, false, 1.0)
                     final_image.draw(in: CGRect(x: 0, y: 0, width: final_image.size.width, height: final_image.size.height))
@@ -148,7 +177,7 @@ class ImageClassificationViewController: UIViewController, ARSCNViewDelegate {
                     }
                     
                     //get result image
-                    let result=UIGraphicsGetImageFromCurrentImageContext()
+                    let result = UIGraphicsGetImageFromCurrentImageContext()
                     UIGraphicsEndImageContext()
                     
                     final_image=result!
@@ -156,15 +185,16 @@ class ImageClassificationViewController: UIViewController, ARSCNViewDelegate {
             }
             
             //display final image
-//            DispatchQueue.main.async{
-//                self.imageView.image = final_image
-//            }
+            DispatchQueue.main.async{
+                self.imageView.image = final_image
+            }
         }
         
         
-        guard let ciimage = image.ciImage else{
-            fatalError("couldn't convert uiimage to ciimage")
-        }
+        let ciimage = CIImage(cgImage: image.cgImage!)
+//        guard let ciimage = CIImage(cgImage: image.cgImage!) else{
+//            fatalError("couldn't convert uiimage to ciimage")
+//        }
         
         let handler=VNImageRequestHandler(ciImage: ciimage)
         DispatchQueue.global(qos: .userInteractive).async{
@@ -195,6 +225,43 @@ class ImageClassificationViewController: UIViewController, ARSCNViewDelegate {
         }
         return predictionValue
     }
+    
+    func imageWithPixelSize(size: CGSize, filledWithColor color: UIColor = UIColor.clear, opaque: Bool = false) -> UIImage {
+        return imageWithSize(size: size, filledWithColor: color, scale: 1.0, opaque: opaque)
+    }
+    
+    func imageWithSize(size: CGSize, filledWithColor color: UIColor = UIColor.clear, scale: CGFloat = 0.0, opaque: Bool = false) -> UIImage {
+        let rect = CGRect(x: 0, y: 0, width: size.width, height: size.height)
+        
+        UIGraphicsBeginImageContextWithOptions(size, opaque, scale)
+        color.set()
+        UIRectFill(rect)
+        let image = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        return image!
+    }
    
+    
+    func image(fromVideo videoURL: URL?, atTime time: TimeInterval) -> UIImage? {
+        // courtesy of memmons
+        // http://stackoverflow.com/questions/1518668/grabbing-the-first-frame-of-a-video-from-uiimagepickercontroller
+        let asset = AVURLAsset(url: videoURL!, options: nil)
+        
+        let assetIG = AVAssetImageGenerator(asset: asset)
+        assetIG.appliesPreferredTrackTransform = true
+        assetIG.apertureMode = .encodedPixels
+        var thumbnailImageRef: CGImage? = nil
+        let thumbnailImageTime = CFTimeInterval(time)
+        let igError: Error? = nil
+        
+        thumbnailImageRef = try! assetIG.copyCGImage(at: CMTimeMake(Int64(thumbnailImageTime), 60), actualTime: nil)
+        
+        var image = UIImage(cgImage: thumbnailImageRef!)
+        
+        return image
+    }
 }
+
+
 
