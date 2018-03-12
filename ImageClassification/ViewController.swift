@@ -19,7 +19,7 @@ class ImageClassificationViewController: UIViewController, ARSCNViewDelegate {
     lazy var mlModel = AlphanoteNew()
     let PREPAREDATA = false
     let PERCENTAGE_OF_DETECTING = 70   // detecting faces inside 30% of the frames
-    let FPS = 10
+    let FPS: Double = 10.0
     func setUpOutput() {
         let videoItem = player.currentItem!
         if videoItem.status != AVPlayerItemStatus.readyToPlay {
@@ -93,24 +93,24 @@ class ImageClassificationViewController: UIViewController, ARSCNViewDelegate {
 
         //http://rtmp.streamaxia.com:1935/streamaxia/Senko/playlist.m3u8
         //http://ec2-13-115-35-165.ap-northeast-1.compute.amazonaws.com/drone.m3u8
-        let videoURL = URL(string: "http://rtmp.streamaxia.com:1935/streamaxia/Senko/playlist.m3u8")!;
+//        let videoURL = URL(string: "http://rtmp.streamaxia.com:1935/streamaxia/Senko/playlist.m3u8")!;
         
-//        let videoURL = URL(string: "http://184.72.239.149/vod/smil:BigBuckBunny.smil/playlist.m3u8")!
+        let videoURL = URL(string: "https://manifest.googlevideo.com/api/manifest/hls_playlist/id/JNMBap_X8Wk.0/itag/95/source/yt_live_broadcast/requiressl/yes/ratebypass/yes/live/1/cmbypass/yes/goi/160/sgoap/gir%3Dyes%3Bitag%3D140/sgovp/gir%3Dyes%3Bitag%3D136/hls_chunk_host/r5---sn-ogueln7r.googlevideo.com/gcr/jp/ei/-fmlWpqVE8OqqQGJpJXIAQ/playlist_type/LIVE/initcwndbps/10650/mm/32/mn/sn-ogueln7r/ms/lv/mv/m/pl/21/dover/10/keepalive/yes/mt/1520826792/ip/221.113.168.170/ipbits/0/expire/1520848473/sparams/ip,ipbits,expire,id,itag,source,requiressl,ratebypass,live,cmbypass,goi,sgoap,sgovp,hls_chunk_host,gcr,ei,playlist_type,initcwndbps,mm,mn,ms,mv,pl/signature/0E3F0E89EE3358E854F217D6E42A9217B107B2A9.43FD989D1076944B05C4C9FAFC6ED5F6E09C7ECB/key/dg_yt0/playlist/index.m3u8")!
 //        let videoURL = URL(string: "https://bitdash-a.akamaihd.net/content/MI201109210084_1/m3u8s/f08e80da-bf1d-4e3d-8899-f0f6155f6efa.m3u8")!
 //        let videoURL = URL(string: "https://mnmedias.api.telequebec.tv/m3u8/29880.m3u8")!
 //        let videoURL = URL(string: "http://ec2-13-115-35-165.ap-northeast-1.compute.amazonaws.com/vod/3.mp4")!
 //        let videoURL = URL(string: "https://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4")!
 //        let videoURL = URL(fileURLWithPath: Bundle.main.path(forResource: "Kengo", ofType: "MOV")!)
         player = AVPlayer(url: videoURL)
-//        let playerLayer = AVPlayerLayer(player: player)
-//        playerLayer.frame = self.view.bounds
-//        self.view.layer.addSublayer(playerLayer)
+        let playerLayer = AVPlayerLayer(player: player)
+        playerLayer.frame = self.view.bounds
+        self.view.layer.addSublayer(playerLayer)
         self.view.bringSubview(toFront: imageView)
         player.play()
         
-        scanTimer = Timer.scheduledTimer(timeInterval: (1/10), target: self, selector: #selector(shotVideo), userInfo: nil, repeats: true)
+        scanTimer = Timer.scheduledTimer(timeInterval: (1.0/FPS), target: self, selector: #selector(shotVideo), userInfo: nil, repeats: true)
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
             self.setUpOutput()
         }
     }
@@ -126,7 +126,7 @@ class ImageClassificationViewController: UIViewController, ARSCNViewDelegate {
     
     func detectFaces(forImage image: UIImage) {
         let request = VNDetectFaceRectanglesRequest{request, error in
-            var final_image = image//self.imageWithPixelSize(size: CGSize(width: image.size.width, height: image.size.height))
+            var final_image = self.imageWithPixelSize(size: CGSize(width: image.size.width, height: image.size.height))
             
             let lineWidth = 0.01*final_image.size.width
             if let results = request.results as? [VNFaceObservation]{
@@ -217,6 +217,22 @@ class ImageClassificationViewController: UIViewController, ARSCNViewDelegate {
         return predictionValue
     }
     
+    
+    func imageWithPixelSize(size: CGSize, filledWithColor color: UIColor = UIColor.clear, opaque: Bool = false) -> UIImage {
+        return imageWithSize(size: size, filledWithColor: color, scale: 1.0, opaque: opaque)
+    }
+    
+    func imageWithSize(size: CGSize, filledWithColor color: UIColor = UIColor.clear, scale: CGFloat = 0.0, opaque: Bool = false) -> UIImage {
+        let rect = CGRect(x: 0, y: 0, width: size.width, height: size.height)
+        
+        UIGraphicsBeginImageContextWithOptions(size, opaque, scale)
+        color.set()
+        UIRectFill(rect)
+        let image = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        return image!
+    }
 }
 
 
