@@ -11,7 +11,7 @@
 		A5539C4C20492DB90005BB50 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A5539C4A20492DB90005BB50 /* AVFoundation.framework */; };
 		A5539C59204CDAD70005BB50 /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5539C58204CDAD70005BB50 /* UIImage+Extension.swift */; };
 		A5539C6B204D15010005BB50 /* CIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5539C6A204D15010005BB50 /* CIImage+Extension.swift */; };
-		A55E2415204FC7D200414E39 /* AlphanoteNew.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = A55E2414204FC7D200414E39 /* AlphanoteNew.mlmodel */; };
+		A5AF614F20590033007E24AF /* AlphanoteTeam.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = A5AF614E20590033007E24AF /* AlphanoteTeam.mlmodel */; };
 		A5B2823F2048D0CD0098743C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5B2823E2048D0CD0098743C /* AppDelegate.swift */; };
 		A5B282412048D0CD0098743C /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5B282402048D0CD0098743C /* ViewController.swift */; };
 		A5B282442048D0CD0098743C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A5B282422048D0CD0098743C /* Main.storyboard */; };
@@ -24,7 +24,7 @@
 		A5539C4A20492DB90005BB50 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		A5539C58204CDAD70005BB50 /* UIImage+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extension.swift"; sourceTree = "<group>"; };
 		A5539C6A204D15010005BB50 /* CIImage+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CIImage+Extension.swift"; sourceTree = "<group>"; };
-		A55E2414204FC7D200414E39 /* AlphanoteNew.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = AlphanoteNew.mlmodel; sourceTree = "<group>"; };
+		A5AF614E20590033007E24AF /* AlphanoteTeam.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = AlphanoteTeam.mlmodel; sourceTree = "<group>"; };
 		A5B2823B2048D0CD0098743C /* ImageClassification.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ImageClassification.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A5B2823E2048D0CD0098743C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A5B282402048D0CD0098743C /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -76,7 +76,7 @@
 		A5B2823D2048D0CD0098743C /* ImageClassification */ = {
 			isa = PBXGroup;
 			children = (
-				A55E2414204FC7D200414E39 /* AlphanoteNew.mlmodel */,
+				A5AF614E20590033007E24AF /* AlphanoteTeam.mlmodel */,
 				A5B2823E2048D0CD0098743C /* AppDelegate.swift */,
 				A5B282402048D0CD0098743C /* ViewController.swift */,
 				A5B282422048D0CD0098743C /* Main.storyboard */,
@@ -162,9 +162,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A5AF614F20590033007E24AF /* AlphanoteTeam.mlmodel in Sources */,
 				A5B282412048D0CD0098743C /* ViewController.swift in Sources */,
 				A5539C59204CDAD70005BB50 /* UIImage+Extension.swift in Sources */,
-				A55E2415204FC7D200414E39 /* AlphanoteNew.mlmodel in Sources */,
 				A5539C6B204D15010005BB50 /* CIImage+Extension.swift in Sources */,
 				A5B2823F2048D0CD0098743C /* AppDelegate.swift in Sources */,
 			);
